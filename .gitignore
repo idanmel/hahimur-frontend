@@ -17,3 +17,5 @@
 /.calva
 /.clj-kondo
 /.lsp
+# Local Netlify folder
+.netlify
