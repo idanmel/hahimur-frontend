@@ -7,8 +7,6 @@
    [reagent.dom :as rd]
    ["highcharts" :as highcharts]))
 
-(def config-atom (r/atom nil))
-
 (defn mount-chart [comp]
   (highcharts/chart (rd/dom-node comp) (clj->js (r/props comp))))
 
@@ -34,7 +32,6 @@
 (defn main-panel [] 
   (let [name (re-frame/subscribe [::subs/name])
         chart-data (re-frame/subscribe [::subs/test-chart])]
-    (js/console.log (->> @chart-data :chart :type)) 
     [:div.pa4-l.pad-m.pa4-ns
      [:h1.f1
       "Hello " @name]
