@@ -17,7 +17,7 @@
  (fn [{:keys [db]} _]                    ;; the first param will be "world"
    {:db   (assoc db :loading-matches? true)   ;; causes the twirly-waiting-dialog to show??
     :http-xhrio {:method          :get
-                 :uri             "https://web-production-6d94.up.railway.app/tournaments/?format=json"
+                 :uri             "https://web-production-6d94.up.railway.app/tournaments/1/matches?format=json"
                  :timeout         8000                                           ;; optional see API docs
                  :response-format (ajax/json-response-format {:keywords? true})  ;; IMPORTANT!: You must provide this.
                  :on-success      [:fetch-matches-success]
