@@ -3,11 +3,17 @@
    [re-frame.core :as re-frame]))
 
 (re-frame/reg-sub
- ::name
+ ::loading-matches?
  (fn [db]
-   (:name db)))
+   (:loading-matches? db)))
 
 (re-frame/reg-sub
- ::test-chart
+ ::fetch-matches-success
  (fn [db]
-   (:test-chart db)))
+   (:fetch-matches-success db)))
+
+(re-frame/reg-sub
+ ::fetch-matches-error
+ (fn [db]
+   (:fetch-matches-error db)))
+

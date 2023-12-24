@@ -29,12 +29,28 @@
                      :series [{:name "Jane" :data [1, 0, 4]}
                               {:name "John" :data [5, 7, 3]}]})
 
-(defn main-panel [] 
-  (let [name (re-frame/subscribe [::subs/name])
-        chart-data (re-frame/subscribe [::subs/test-chart])]
+(def match {
+            :date "2021-06-11T21:00:00Z" 
+            :home-team {:id 1 :name "Turkey"}
+            :away-team {:id 2 :name "Germany"}})
+
+(defn display-team [{:keys [name flag]}]
+  [:div name " " flag])
+
+(defn display-match [{:keys [date home-team away-team]}]
+  [:div date " " (display-team home-team) " " (display-team away-team)])
+
+(defn main-panel []
+  (let [loading-matches? (re-frame/subscribe [::subs/loading-matches?])
+        matches (re-frame/subscribe [::subs/fetch-matches-success])
+        matches-error (re-frame/subscribe [::subs/fetch-matches-error])]
     [:div.pa4-l.pad-m.pa4-ns
-     [:h1.f1
-      "Hello " @name]
-     [:button.bw0.br2.bg-blue.pa2.white.fw1.tc.ttu {:on-click #(re-frame/dispatch [::events/update-test-chart test-chart])} "Make API call"]
-     [:button {:on-click #(re-frame/dispatch [::events/update-name "W"])} "Update Name"]
-     (chart-outer chart-data)]))
+     [:h1.f1 "Hahimur - Euro 2020"]
+     [:h3.f1 "Games"]
+     (when @loading-matches? "Loading...")
+     (when @matches-error "Nice") 
+     (map display-match @matches)
+     (display-match match)]))
+    ;;  [:button.bw0.br2.bg-blue.pa2.white.fw1.tc.ttu {:on-click #(re-frame/dispatch [::events/update-test-chart test-chart])} "Make API call"]
+    ;;  [:button {:on-click #(re-frame/dispatch [::events/update-name "W"])} "Update Name"]
+    ;;  (chart-outer chart-data)]))

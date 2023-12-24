@@ -9,4 +9,6 @@
 
 (def default-db
   {:name "Idan"
-   :test-chart chart-wow})
+   :test-chart chart-wow
+   :loading-matches? true
+   :matches []})
