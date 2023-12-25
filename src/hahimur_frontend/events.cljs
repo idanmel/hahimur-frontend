@@ -29,14 +29,14 @@
             :home_team {:id 1 :name "Turkey" :shalom_wiw "123"}
             :away_team {:id 2 :name "Germany"}})
 
-(defn ->kebab-case->map->keywords [stuff]
+(defn ->kebab-case-map-keywords [stuff]
   (walk/postwalk #(if (keyword? %) (csk/->kebab-case-keyword %) %) stuff))
 
 (re-frame/reg-event-db
  ::fetch-matches-success
  (fn [db [_ {:keys [data]}]] 
    (assoc db 
-          :matches (->kebab-case->map->keywords data)
+          :matches (->kebab-case-map-keywords data)
           :loading-matches? false)))
 
 (re-frame/reg-event-db
