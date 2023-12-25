@@ -29,17 +29,12 @@
                      :series [{:name "Jane" :data [1, 0, 4]}
                               {:name "John" :data [5, 7, 3]}]})
 
-(def match {
-            :date "2021-06-11T21:00:00Z" 
-            :home-team {:id 1 :name "Turkey"}
-            :away-team {:id 2 :name "Germany"}})
-
 (defn display-team [{:keys [name flag]}]
   [:div name " " flag])
 
-(defn display-match [{:keys [date home_team away_team] :as data}]
+(defn display-match [{:keys [date home-team away-team] :as data}]
   (println data)
-  [:div date " " (display-team home_team) " " (display-team away_team)])
+  [:div date " " (display-team home-team) " " (display-team away-team)])
 
 (defn main-panel []
   (let [loading-matches? (re-frame/subscribe [::subs/loading-matches?])

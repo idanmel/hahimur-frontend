@@ -1,8 +1,10 @@
 (ns hahimur-frontend.events
   (:require
+   [clojure.walk :as walk]
    [re-frame.core :as re-frame]
    [day8.re-frame.http-fx]
-   [ajax.core :as ajax]  
+   [ajax.core :as ajax]
+   [camel-snake-kebab.core :as csk]
    [hahimur-frontend.db :as db]
    [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
@@ -23,11 +25,18 @@
                  :on-success      [::fetch-matches-success]
                  :on-failure      [::fetch-matches-error]}}))
 
+(def match {:date "2021-06-11T21:00:00Z"
+            :home_team {:id 1 :name "Turkey" :shalom_wiw "123"}
+            :away_team {:id 2 :name "Germany"}})
+
+(defn ->kebab-case->map->keywords [stuff]
+  (walk/postwalk #(if (keyword? %) (csk/->kebab-case-keyword %) %) stuff))
+
 (re-frame/reg-event-db
  ::fetch-matches-success
  (fn [db [_ {:keys [data]}]] 
    (assoc db 
-          :matches data 
+          :matches (->kebab-case->map->keywords data)
           :loading-matches? false)))
 
 (re-frame/reg-event-db
