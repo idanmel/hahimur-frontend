@@ -10,7 +10,7 @@
 (re-frame/reg-sub
  ::fetch-matches-success
  (fn [db]
-   (:fetch-matches-success db)))
+   (:matches db)))
 
 (re-frame/reg-sub
  ::fetch-matches-error
