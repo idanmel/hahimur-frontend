@@ -11,4 +11,5 @@
   {:name "Idan"
    :test-chart chart-wow
    :loading-matches? true
-   :matches []})
+   :matches []
+   :logged-in? false})

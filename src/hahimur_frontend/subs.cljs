@@ -17,3 +17,7 @@
  (fn [db]
    (:fetch-matches-error db)))
 
+(re-frame/reg-sub
+ ::logged-in?
+ (fn [db]
+   (:logged-in? db)))
