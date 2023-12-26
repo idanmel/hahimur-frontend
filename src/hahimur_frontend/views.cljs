@@ -50,7 +50,7 @@
      [:input#token {:on-change emit :type "text" :name "token" :placeholder "Token"}]
      [:button {:on-click #(re-frame/dispatch [::events/login])} "Login"]]))
 
-(defn display-log-out-from []
+(defn display-log-out-button []
   [:div.flex-grow.pa3.flex.items-center
    [:button {:on-click #(re-frame/dispatch [::events/logout])} "Logout"]])
 
@@ -59,7 +59,7 @@
     [:nav.flex.justify-between.bb.bg-near-black
      [:div.white-70.hover-white.no-underline.flex.items-center.pa3 "Hahimur"]
      (if @logged-in?
-       (display-log-out-from)
+       (display-log-out-button)
        (display-login-form))]))
 
 (defn main-panel []

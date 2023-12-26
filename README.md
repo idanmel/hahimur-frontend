@@ -7,6 +7,6 @@ To Do
   - Add inputs
   - Make sure inputs are integers and only 0 or more
 - Save 1 prediction
-  - Login
-  - Save prediction
+  - Login ✅
+  - * Save prediction
 - Get Saved prediction
