@@ -12,4 +12,6 @@
    :test-chart chart-wow
    :loading-matches? true
    :matches []
-   :logged-in? false})
+   :logged-in? false
+   :predictions []
+   :saving-predictions? false})

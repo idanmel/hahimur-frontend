@@ -45,9 +45,10 @@
 
 (defn display-login-form []
   (let [gettext (fn [e] (-> e .-target .-value))
-        emit    (fn [e] (re-frame/dispatch [::events/update-token (gettext e)]))]
+        emit    (fn [e] (re-frame/dispatch [::events/update-token (gettext e)]))
+        token (re-frame/subscribe [::subs/token])]
     [:div.flex-grow.pa3.flex.items-center
-     [:input#token {:on-change emit :type "text" :name "token" :placeholder "Token"}]
+     [:input#token {:on-change emit :type "text" :name "token" :placeholder "Token" :value @token}]
      [:button {:on-click #(re-frame/dispatch [::events/login])} "Login"]]))
 
 (defn display-log-out-button []
@@ -62,6 +63,9 @@
        (display-log-out-button)
        (display-login-form))]))
 
+(defn- display-save []
+  [:button {:on-click #(re-frame/dispatch [::events/save-predictions])} "Save"])
+
 (defn main-panel []
   (let [loading-matches? (re-frame/subscribe [::subs/loading-matches?])
         matches (re-frame/subscribe [::subs/fetch-matches-success])
@@ -73,7 +77,8 @@
       [:h3.f1 "Games"]
       (when @loading-matches? "Loading...")
       (when @matches-error "Nice")
-      (map display-match [match])]]))
+      (map display-match [match])
+      (display-save)]]))
     ;;  [:button.bw0.br2.bg-blue.pa2.white.fw1.tc.ttu {:on-click #(re-frame/dispatch [::events/update-test-chart test-chart])} "Make API call"]
     ;;  [:button {:on-click #(re-frame/dispatch [::events/update-name "W"])} "Update Name"]
     ;;  (chart-outer chart-data)]))

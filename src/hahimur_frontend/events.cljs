@@ -14,14 +14,14 @@
             db/default-db))
 
 
-(re-frame/reg-event-fx                             ;; note the trailing -fx
- ::fetch-matches                      ;; usage:  (dispatch [:handler-with-http])
- (fn [{:keys [db]} _]                    ;; the first param will be "world"
-   {:db (assoc db :loading-matches? true)   ;; causes the twirly-waiting-dialog to show??
+(re-frame/reg-event-fx
+ ::fetch-matches
+ (fn [{:keys [db]} _]
+   {:db (assoc db :loading-matches? true)
     :http-xhrio {:method          :get
                  :uri             "https://web-production-6d94.up.railway.app/tournaments/1/matches?format=json"
-                 :timeout         8000                                  ;; optional see API docs
-                 :response-format (ajax/json-response-format {:keywords? true})  ;; IMPORTANT!: You must provide this.
+                 :timeout         8000
+                 :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-matches-success]
                  :on-failure      [::fetch-matches-error]}}))
 
@@ -48,24 +48,24 @@
  (fn [db [_ token]]
    (assoc db :token token)))
 
-
 (re-frame/reg-event-fx
  ::login
  (fn [{:keys [db]} _]
    {:db db
-    :http-xhrio {:method          :post
-                 :uri             "https://web-production-6d94.up.railway.app/tournaments/login"
+    :http-xhrio {:method          :get
+                 :uri             "https://web-production-6d94.up.railway.app/tournaments/1/predictions"
                  :timeout         8000
-                 :params          {:token (:token db)}
-                 :format          (ajax/json-request-format)
+                 :headers         {:token (:token db)}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::login-success]
                  :on-failure      [::login-error]}}))
 
 (re-frame/reg-event-db
  ::login-success
- (fn [db [_ _]]
-   (assoc db :logged-in? true)))
+ (fn [db [_ {:keys [data]}]]
+   (assoc db
+          :logged-in? true
+          :predictions data)))
 
 (re-frame/reg-event-db
  ::login-error
@@ -76,3 +76,27 @@
  ::logout
  (fn [db [_ _]]
    (assoc db :logged-in? false)))
+
+(re-frame/reg-event-fx
+ ::save-predictions
+ (fn [{:keys [db]} _]
+   {:db (assoc db :saving-predictions? true)
+    :http-xhrio {:method          :post
+                 :uri             "https://web-production-6d94.up.railway.app/tournaments/1/predictions"
+                 :timeout         8000
+                 :params          {:predictions (:predictions db)}
+                 :headers         {:token (:token db)}
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::saving-predictions-success]
+                 :on-failure      [::saving-predictions-error]}}))
+
+(re-frame/reg-event-db
+ ::saving-predictions-error
+ (fn [db [_ _]]
+   (assoc db :saving-predictions? false)))
+
+(re-frame/reg-event-db
+ ::saving-predictions-success
+ (fn [db [_ _]]
+   (assoc db :saving-predictions? false)))

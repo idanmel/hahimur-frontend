@@ -21,3 +21,8 @@
  ::logged-in?
  (fn [db]
    (:logged-in? db)))
+
+(re-frame/reg-sub
+ ::token
+ (fn [db]
+   (:token db)))
